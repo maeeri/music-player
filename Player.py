@@ -7,45 +7,44 @@ from pygame import mixer
 
 class Player:
     def __init__(self):
+        self.paused = False
         root = Tk()
-        root.title("Music player")
+        root.title("Museic")
         root.geometry("920x600+290+85")
         root.configure(background='#76b5c5')
         root.resizable(True, True)
         mixer.init()
 
         self.Image_Icon = PhotoImage(file='img/logos/logo.png')
-        self.Top = PhotoImage(file='img/background/top.png')
-        self.Logo = PhotoImage(file='img/logos/logo.png')
+        self.Top = PhotoImage(file='img/background/background.png')
         self.Button_Play = PhotoImage(file='img/buttons/play.png')
         self.Button_Stop = PhotoImage(file='img/buttons/stop.png')
-        self.Button_Resume = PhotoImage(file='img/buttons/resume.png')
         self.Button_Pause = PhotoImage(file='img/buttons/pause.png')
         self.Menu = PhotoImage(file='img/logos/logo.png')
+        self.Button_Folder = PhotoImage(file='img/buttons/folder.png')
+        self.Button_Next = PhotoImage(file='img/buttons/next.png')
+        self.Button_Previous = PhotoImage(file='img/buttons/previous.png')
 
         root.iconphoto(False, self.Image_Icon)
-        Label(root, image=self.Top, bg='#2596be')
-        Label(root, image=self.Logo, bg='white', bd=0).place(x=70, y=115)
+        Label(root, image=self.Top, bg='#2596be').pack()
 
-        Button(root, image=self.Button_Play, bg='white', bd=0,
-               command=self.play_music).place(x=100, y=400)
-        Button(root, image=self.Button_Stop, bg='white', bd=0,
-               command=mixer.music.stop).place(x=30, y=500)
-        Button(root, image=self.Button_Resume, bg='white', bd=0,
-               command=mixer.music.unpause).place(x=115, y=500)
-        Button(root, image=self.Button_Pause, bg='white', bd=0,
-               command=mixer.music.pause).place(x=200, y=500)
+        Button(root, image=self.Button_Play, bg='grey', bd=0,
+               command=self.play_music).place(x=687, y=250)
+        Button(root, image=self.Button_Stop, bg='grey', bd=0,
+               command=mixer.music.stop).place(x=747, y=250)
+        Button(root, image=self.Button_Pause, bg='grey', bd=0,
+               command=self.control_pause).place(x=807, y=250)
 
-        Label(root, image=self.Menu, bg='white').pack(
+        Label(root, image=self.Menu, bg='grey').pack(
             padx=10, pady=50, side=RIGHT)
         self.Frame_Music = Frame(root, bd=2, relief=RIDGE)
-        self.Frame_Music.place(x=330, y=350, width=560, height=250)
+        self.Frame_Music.place(x=300, y=300, width=560, height=250)
 
-        Button(root, text='open folder', width=15, height=2, font=('times new roman', 10,
-               'bold'), fg='black', bg='white', command=self.add_music).place(x=330, y=300)
+        Button(root, image=self.Button_Folder, bg='grey', bd=0,
+               command=self.add_music).place(x=300, y=250)
 
         self.Scroll = Scrollbar(self.Frame_Music)
-        self.Playlist = Listbox(self.Frame_Music, width=100, font=('times new roman', 10), bg='white',
+        self.Playlist = Listbox(self.Frame_Music, width=100, font=('courier', 10), bg='white',
                                 fg='grey', selectbackground='lightblue', cursor='hand2', bd=0, yscrollcommand=self.Scroll.set)
         self.Scroll.config(command=self.Playlist.yview)
         self.Scroll.pack(side=RIGHT, fill=Y)
@@ -63,6 +62,12 @@ class Player:
                     self.Playlist.insert(END, song)
 
     def play_music(self):
-        music_name = self.Playlist.get(ACTIVE)
         mixer.music.load(self.Playlist.get(ACTIVE))
         mixer.music.play()
+
+    def control_pause(self):
+        if self.paused:
+            mixer.music.unpause()
+        else:
+            mixer.music.pause()
+        self.paused = not self.paused
