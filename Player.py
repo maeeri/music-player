@@ -28,24 +28,28 @@ class Player:
         root.iconphoto(False, self.Image_Icon)
         Label(root, image=self.Top, bg='#2596be').pack()
 
-        Button(root, image=self.Button_Play, bg='grey', bd=0,
-               command=self.play_music).place(x=687, y=250)
-        Button(root, image=self.Button_Stop, bg='grey', bd=0,
+        Button(root, image=self.Button_Play, bg='black', activebackground='black', bd=0,
+               command=self.play_music).place(x=537, y=250)
+        Button(root, image=self.Button_Stop, bg='black', activebackground='black', bd=0,
                command=mixer.music.stop).place(x=747, y=250)
-        Button(root, image=self.Button_Pause, bg='grey', bd=0,
-               command=self.control_pause).place(x=807, y=250)
+        Button(root, image=self.Button_Pause, bg='black', activebackground='black', bd=0,
+               command=self.control_pause).place(x=687, y=250)
+        Button(root, image=self.Button_Next,
+               bg='black', activebackground='black', bd=0).place(x=807, y=250)
+        Button(root, image=self.Button_Previous,
+               bg='black', activebackground='black', bd=0).place(x=627, y=250)
 
-        Label(root, image=self.Menu, bg='grey').pack(
+        Button(root, image=self.Button_Folder, bg='black', activebackground='black', bd=0,
+               command=self.add_music).place(x=300, y=250)
+
+        Label(root, image=self.Menu, bg='black').pack(
             padx=10, pady=50, side=RIGHT)
         self.Frame_Music = Frame(root, bd=2, relief=RIDGE)
         self.Frame_Music.place(x=300, y=300, width=560, height=250)
 
-        Button(root, image=self.Button_Folder, bg='grey', bd=0,
-               command=self.add_music).place(x=300, y=250)
-
         self.Scroll = Scrollbar(self.Frame_Music)
-        self.Playlist = Listbox(self.Frame_Music, width=100, font=('courier', 10), bg='white',
-                                fg='grey', selectbackground='lightblue', cursor='hand2', bd=0, yscrollcommand=self.Scroll.set)
+        self.Playlist = Listbox(self.Frame_Music, width=100, font=('courier', 10), bg='#004aad',
+                                fg='white', selectbackground='#5de0e6', cursor='hand2', bd=0, yscrollcommand=self.Scroll.set)
         self.Scroll.config(command=self.Playlist.yview)
         self.Scroll.pack(side=RIGHT, fill=Y)
         self.Playlist.pack(side=LEFT, fill=BOTH)
