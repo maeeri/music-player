@@ -12,12 +12,15 @@ class Player:
         self.btns_filepath = 'txt/btns.json'
         self.preferences_filepath = 'txt/preferences.json'
         self.preferences = {}
+        self.songs = []
+        self.curr_song = 0
 
         with open(self.preferences_filepath) as pref_file:
             content = json.load(pref_file)
             if content:
                 self.preferences = content
 
+    def loop(self):
         root = Tk()
         root.title("Museic")
         root.geometry("920x600+290+85")
@@ -25,23 +28,12 @@ class Player:
         root.resizable(False, False)
         mixer.init()
 
-        
-
         self.Background = PhotoImage(file='img/background.png')
         Label(root, image=self.Background, bg='#2596be').pack()
 
         self.draw_buttons(root)
 
-        self.Frame_Music = Frame(root, bd=2, relief=RAISED)
-        self.Frame_Music.place(x=300, y=300, width=560, height=250)
-
-        self.Scroll = Scrollbar(self.Frame_Music, width=13, bg='white',
-                                activebackground='grey', highlightcolor='yellow')
-        self.Area_Playlist = Listbox(self.Frame_Music, width=100, font=('courier new', 10), bg='#004aad',
-                                     fg='white', selectbackground='#5de0e6', cursor='hand2', bd=0, yscrollcommand=self.Scroll.set)
-        self.Scroll.config(command=self.Area_Playlist.yview)
-        self.Scroll.pack(side=RIGHT, fill=Y)
-        self.Area_Playlist.pack(side=LEFT, fill=BOTH)
+        self.draw_playlist(root)
 
         if self.preferences['path']:
             self.get_music(self.preferences['path'])
@@ -50,10 +42,11 @@ class Player:
 
     def get_music(self, path):
         os.chdir(path)
-        songs = os.listdir(path)
-        for song in songs:
+        self.songs = os.listdir(path)
+        for song in self.songs:
             if song.endswith('.mp3'):
                 self.Area_Playlist.insert(END, song)
+        self.queue_music()
 
     def add_music(self):
         path = filedialog.askdirectory()
@@ -71,6 +64,7 @@ class Player:
                     self.Area_Playlist.insert(END, song)
 
     def play_music(self):
+        self.curr_song = self.Area_Playlist.curselection()[0] if self.Area_Playlist.curselection() else self.curr_song
         mixer.music.load(self.Area_Playlist.get(ACTIVE))
         mixer.music.play()
 
@@ -82,7 +76,8 @@ class Player:
         self.paused = not self.paused
 
     def draw_buttons(self, root):
-        self.Button_Play = PhotoImage(file='img/buttons/play.png')
+        self.Button_Play = PhotoImage(
+            file='img/buttons/play.png')
         Button(root, image=self.Button_Play, bg='black', activebackground='black', bd=0,
                command=self.play_music).place(x=537, y=250)
 
@@ -106,13 +101,33 @@ class Player:
         Button(root, image=self.Button_Next,
                bg='black', activebackground='black', command=self.next_song, bd=0).place(x=807, y=250)
 
-    def Custom_Button(self, root, path, handle, x_pos, y_pos):
-        img = PhotoImage(file=path)
-        return Button(root, image=img, bg='black', activebackground='black',
-                      bd=0, command=handle)
+    def draw_playlist(self, root):
+        self.Frame_Music = Frame(root, bd=2, relief=RAISED)
+        self.Frame_Music.place(x=300, y=300, width=560, height=250)
+
+        self.Scroll = Scrollbar(self.Frame_Music, width=13, bg='white',
+                                activebackground='grey', highlightcolor='yellow')
+        self.Area_Playlist = Listbox(self.Frame_Music, width=100, font=('courier new', 10), bg='#004aad',
+                                     fg='white', selectbackground='#5de0e6', cursor='hand2', bd=0, yscrollcommand=self.Scroll.set)
+        self.Scroll.config(command=self.Area_Playlist.yview)
+        self.Scroll.pack(side=RIGHT, fill=Y)
+        self.Area_Playlist.pack(side=LEFT, fill=BOTH)
 
     def next_song(self):
-        pass
+        self.curr_song += 1
+        self.Area_Playlist.activate(self.curr_song)
+        self.play_music()
 
     def prev_song(self):
-        pass
+        if mixer.music.get_pos() > 5100:
+            print(mixer.music.get_pos())
+            mixer.music.set_pos(0)
+        else:
+            self.curr_song -= 1
+            self.Area_Playlist.activate(self.curr_song)
+            self.play_music()
+
+    def queue_music(self):
+        for song in self.songs:
+            if song.endswith('.mp3'):
+                mixer.music.queue(song)

@@ -1,4 +1,5 @@
 from Player import Player
 
 if __name__ == "__main__":
-    Player()
+    player = Player()
+    player.loop()
