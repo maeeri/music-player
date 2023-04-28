@@ -1,0 +1,38 @@
+[
+  {
+    "name": "play",
+    "path": "img/buttons/play.png",
+    "x": 537,
+    "y": 250
+  },
+  {
+    "name": "stop",
+    "path": "img/buttons/stop.png",
+    "x": 747,
+    "y": 250
+  },
+  {
+    "name": "pause",
+    "path": "img/buttons/pause.png",
+    "x": 687,
+    "y": 250
+  },
+  {
+    "name": "prev",
+    "path": "img/buttons/previous.png",
+    "x": 627,
+    "y": 250
+  },
+  {
+    "name": "next",
+    "path": "img/buttons/next.png",
+    "x": 807,
+    "y": 250
+  },
+  {
+    "name": "folder",
+    "path": "img/buttons/folder.png",
+    "x": 300,
+    "y": 250
+  }
+]
