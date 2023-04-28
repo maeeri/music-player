@@ -1,6 +1,7 @@
 # music-player
 
 Practice project made using PyGame and Tkinter
+
 Work in progress
 
 from https://sweetcode.io/how-to-create-an-mp3-music-player-using-python/
