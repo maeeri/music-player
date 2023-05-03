@@ -43,7 +43,6 @@ class Player:
 
     def update(self):
         for event in pygame.event.get():
-            print(event.type)
             if event.type == self.SONGEND:
                 self.next_song()
         self.Playlist.after(1000, lambda: self.update())
