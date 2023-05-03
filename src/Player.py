@@ -18,7 +18,7 @@ class Player:
         self.songnames = []
         self.song = None
         self.curr_song = 0
-        self.SONGEND = USEREVENT + 258
+        self.SONGEND = pygame.event.custom_type()
 
         with open(self.filepath_pref) as pref_file:
             content = json.load(pref_file)
@@ -42,6 +42,10 @@ class Player:
         self.draw_playlist()
 
     def update(self):
+        for event in pygame.event.get():
+            print(event.type)
+            if event.type == self.SONGEND:
+                self.next_song()
         self.Playlist.after(1000, lambda: self.update())
 
     def loop(self):
@@ -58,10 +62,8 @@ class Player:
         if self.preferences and 'path' in self.preferences:
             self.get_music(self.preferences['path'])
 
-        # for event in pygame.event.get():
-        #     if event.type == self.SONGEND:
-        #         self.next_song()
         
+        self.root.after(1000, self.update)
         self.root.mainloop()
 
     # loads latest playlist from json file
