@@ -15,7 +15,8 @@
 
 ### how to run
 
-    Clone the project to your local repository. After installing the required tools and libraries, run main.py from your IDE.
+    Clone the project to your local repository. After installing the required tools and libraries, 
+    run main.py from your IDE.
 
 from https://sweetcode.io/how-to-create-an-mp3-music-player-using-python/
 
