@@ -8,11 +8,13 @@ import pygame
 from mutagen import mp3
 import json
 
-
 class Player:
+    global dirname
+    dirname = os.path.dirname(__file__)
+
     def __init__(self):
         self.paused = False
-        self.filepath_pref = 'txt/preferences.json'
+        self.filepath_pref = os.path.join(dirname, 'txt/preferences.json')
         self.preferences = {}
         self.song_files = []
         self.songnames = []
@@ -20,10 +22,11 @@ class Player:
         self.curr_song = 0
         self.SONGEND = pygame.event.custom_type()
 
-        with open(self.filepath_pref) as pref_file:
-            content = json.load(pref_file)
-            if content:
-                self.preferences = content
+        if os.path.isfile(self.filepath_pref):
+            with open(self.filepath_pref) as pref_file:
+                content = json.load(pref_file)
+                if content:
+                    self.preferences = content
 
         self.loop()
 
@@ -99,23 +102,23 @@ class Player:
         Button(self.root, image=self.Button_Play, bg='black', activebackground='black', bd=0,
                command=self.play_music).place(x=x_base, y=y_base)
 
-        self.Button_Stop = PhotoImage(file='img/buttons/stop.png')
+        self.Button_Stop = PhotoImage(file=os.path.join(dirname, 'img/buttons/stop.png'))
         Button(self.root, image=self.Button_Stop, bg='black', activebackground='black', bd=0,
                command=self.stop_music).place(x=x_base+220, y=y_base)
 
-        self.Button_Previous = PhotoImage(file='img/buttons/previous.png')
+        self.Button_Previous = PhotoImage(file=os.path.join(dirname, 'img/buttons/previous.png'))
         Button(self.root, image=self.Button_Previous,
                bg='black', activebackground='black', command=self.prev_song, bd=0).place(x=x_base + 100, y=y_base)
 
-        self.Button_Pause = PhotoImage(file='img/buttons/pause.png')
+        self.Button_Pause = PhotoImage(file=os.path.join(dirname, 'img/buttons/pause.png'))
         Button(self.root, image=self.Button_Pause, bg='black', activebackground='black', bd=0,
                command=self.control_pause).place(x=x_base+160, y=y_base)
 
-        self.Button_Folder = PhotoImage(file='img/buttons/folder.png')
+        self.Button_Folder = PhotoImage(file=os.path.join(dirname, 'img/buttons/folder.png'))
         Button(self.root, image=self.Button_Folder, bg='black', activebackground='black', bd=0,
                command=self.add_music).place(x=300, y=y_base)
 
-        self.Button_Next = PhotoImage(file='img/buttons/next.png')
+        self.Button_Next = PhotoImage(file=os.path.join(dirname, 'img/buttons/next.png'))
         Button(self.root, image=self.Button_Next,
                bg='black', activebackground='black', command=self.next_song, bd=0).place(x=x_base+280, y=y_base)
 
@@ -142,7 +145,7 @@ class Player:
 
     # draws background image
     def draw_background(self):
-        self.Background = PhotoImage(file='img/background.png')
+        self.Background = PhotoImage(file=os.path.join(dirname, 'img/background.png'))
         Label(self.root, image=self.Background, bg='#2596be').pack()
 
     # controls play button
